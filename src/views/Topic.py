@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from ..models.NewsTopicModel import TopicModel, TopicSchema
+from ..models.TopicModel import TopicModel, TopicSchema
 from ..models import DBFunc
 from ..views import resFormat
 
@@ -20,7 +20,8 @@ class Topic(Resource):
             json_data = request.get_json(force=True)
 
             if not json_data:
-                return resFormat(400, {"message": "No input data provided"}).set, 400
+                msg = {"message": "No input data provided"}
+                return resFormat(400, msg).set, 400
 
             data, errors = topic_schema.load(json_data)
             if errors:
@@ -28,7 +29,8 @@ class Topic(Resource):
 
             resdata = TopicModel.query.filter_by(title=data['title']).first()
             if resdata:
-                return resFormat(400, {"message": "Title already exists"}).set, 400
+                msg = {"message": "Title already exists"}
+                return resFormat(400, msg).set, 400
 
             resdata = TopicModel(
                 status_id=json_data['status_id'],
@@ -40,7 +42,8 @@ class Topic(Resource):
 
             res = topic_schema.dump(resdata).data
         except:
-            return resFormat(400, {"message": "Bad Request"}).set, 400
+            msg = {"message": "Bad Request"}
+            return resFormat(400, msg).set, 400
 
         return resFormat(201, res).set, 201
 
@@ -49,7 +52,8 @@ class Topic(Resource):
             json_data = request.get_json(force=True)
 
             if not json_data:
-                return resFormat(400, {"message": "No input data provided"}).set, 400
+                msg = {"message": "No input data provided"}
+                return resFormat(400, msg).set, 400
 
             data, errors = topic_schema.load(json_data)
             if errors:
@@ -57,7 +61,8 @@ class Topic(Resource):
 
             resdata = TopicModel.query.filter_by(topic_id=data['topic_id']).first()
             if not resdata:
-                return resFormat(400, {"message": "News does not exist"}).set, 400
+                msg = {"message": "News does not exist"}
+                return resFormat(400, msg).set, 400
 
             resdata.status_id = data['status_id']
             resdata.title = data['title']
@@ -67,7 +72,8 @@ class Topic(Resource):
 
             res = topic_schema.dump(resdata).data
         except:
-            return resFormat(400, {"message": "Bad Request"}).set, 400
+            msg = {"message": "Bad Request"}
+            return resFormat(400, msg).set, 400
 
         return resFormat(204, res).set, 204
 
@@ -76,7 +82,8 @@ class Topic(Resource):
             json_data = request.get_json(force=True)
 
             if not json_data:
-                return resFormat(400, {"message": "No input data provided"}).set, 400
+                msg = {"message": "No input data provided"}
+                return resFormat(400, msg).set, 400
 
             data, errors = topic_schema.load(json_data)
             if errors:
@@ -88,7 +95,8 @@ class Topic(Resource):
 
             res = topic_schema.dump(resdata).data
         except:
-            return resFormat(400, {"message": "Bad Request"}).set, 400
+            msg = {"message": "Bad Request"}
+            return resFormat(400, msg).set, 400
 
         return resFormat(204, res).set, 204
 

@@ -11,3 +11,4 @@ class DBFunc:
 
     def commitaja(self):
         db.session.commit()
+
