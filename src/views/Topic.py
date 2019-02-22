@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from ..models.TopicModel import *
+from ..models.NewsTopicModel import TopicModel, TopicSchema
 from ..models import DBFunc
 from ..views import resFormat
 

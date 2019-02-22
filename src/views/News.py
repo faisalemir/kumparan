@@ -1,6 +1,7 @@
 from flask import request
 from flask_restful import Resource
-from ..models.NewsModel import *
+from ..models.NewsTopicModel import NewsModel, NewsSchema
+from ..models.NewsStatusModel import *
 from ..models import DBFunc
 from ..views import resFormat
 
@@ -9,9 +10,8 @@ news_schema = NewsSchema()
 
 class News(Resource):
     def get(self):
-        query = NewsModel.query.all()
+        query = NewsModel.query.join(NewsModel.topic_list).all()
         data = newslist_schema.dump(query).data
-
 
         return resFormat(200, data).set, 200
 

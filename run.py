@@ -3,7 +3,7 @@ from flask import Flask
 def create_app(env):
     app = Flask(__name__)
 
-    from src.config import app_config
+    from config import app_config
     app.config.from_object(app_config[env])
 
     from src import api_bp
