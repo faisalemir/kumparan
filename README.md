@@ -13,11 +13,10 @@ python src/test/unittest.py
 ```
 ## Usage
 ### 1. News
-    Url:  http://127.0.0.1:5000/news
   - Get All News
-
-    Method: `GET`
-    
+    ```
+    GET /news
+    ```    
     Url Parameters:
 
     ```
@@ -27,20 +26,16 @@ python src/test/unittest.py
     ```
     Example:
     ```
-    http://127.0.0.1:5000/new?status=<news_id>&topic=<topic_id>
+    GET /news?status=<news_id>&topic=<topic_id>
     ```
   - Get News by id
-  
-    Method: `GET`
-    
-    Url Parameter:
     ```
-    http://127.0.0.1:5000/news/<int: news_id>
+    GET news/<int: news_id>
     ```
   - Insert News
-    
-    Method: `POST`
-
+    ```
+    POST /news
+    ```
     JSON Request Parameters:
     ```
     {
@@ -58,9 +53,9 @@ python src/test/unittest.py
     }
     ```
   - Update News Information
-
-    Method: `PUT`
-
+    ```
+    PUT /news
+    ```
     JSON Request Parameters:
     ```
     {
@@ -71,33 +66,23 @@ python src/test/unittest.py
     }
     ```
   - Delete News
-
-    Method: `DELETE`
-
-    Url Parameter:
     ```
-    http://127.0.0.1:5000/news/<int: news_id>
+    DELETE /news/<int: news_id>
     ```
 
 ### 2. Topics
-    Url:  http://127.0.0.1:5000/topic
   - Get All Topics
-
-    Method: `GET`
-    
+    ```
+    GET /topic
+    ```    
   - Get Topic by id
-  
-    Method: `GET`
-    
-    Url Parameter:
     ```
-    http://127.0.0.1:5000/topic/<int: news_id>
-    ```
-
+    GET /topic/<int: news_id>
+    ```    
   - Insert Topic
-
-    Method: `POST`
-
+    ```
+    POST /topic
+    ```    
     JSON Request Parameters:
     ```
     {
@@ -105,9 +90,9 @@ python src/test/unittest.py
     }
     ```
   - Update Topic Information
-
-    Method: `PUT`
-
+    ```
+    PUT /topic
+    ```    
     JSON Request Parameters:
     ```
     {
@@ -116,10 +101,6 @@ python src/test/unittest.py
     }
     ```
   - Delete Topic
-
-    Method: `DELETE`
-
-    Url Parameter:
     ```
-    http://127.0.0.1:5000/news/<int: news_id>
-    ```
+    DELETE /topic/<int: news_id>
+    ```    
