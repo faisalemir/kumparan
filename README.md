@@ -7,7 +7,7 @@ Run this command to terminal
 ```
 python run.py
 ```
-To run unit testing use command bellow
+To run unit testing use this command bellow
 ```
 python src/test/unittest.py
 ```
