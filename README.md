@@ -1,6 +1,6 @@
 # Kumparan Simple RESTful API with Python
 
-## Usage
+## Installation
 Restore database using `kumparan.sql`
 
 Run this command to terminal
@@ -11,7 +11,7 @@ To run unit testing use command bellow
 ```
 python src/test/unittest.py
 ```
-## Features
+## Usage
 ### 1. News
     Url:  http://127.0.0.1:5000/news
   - Get All News
