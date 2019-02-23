@@ -1,7 +1,7 @@
 # Kumparan Simple RESTful API with Python
 
 ## Installation
-Restore database using `kumparan.sql`
+Restore MySQL database using `kumparan.sql`
 
 Run this command to terminal
 ```
