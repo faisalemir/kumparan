@@ -17,13 +17,14 @@ python src/test/unittest.py
     ```
     GET /news
     ```    
-    Url Parameters:
+    Option Parameters:
 
-    ```
-    Filter by News status:  status=<news_id>
+    Filter by News status:  
+    `status=<news_id>`
 
-    Filer by News topics:   topic=<topic_id>
-    ```
+    Filer by News topics:   
+    `topic=<topic_id>`
+    
     Example:
     ```
     GET /news?status=<news_id>&topic=<topic_id>
