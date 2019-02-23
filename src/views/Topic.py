@@ -1,19 +1,21 @@
 from flask import request
 from flask_restful import Resource
 from ..models.TopicModel import TopicModel, TopicSchema
-from ..models import DBFunc
 from ..views import resFormat
 
 topiclist_schema = TopicSchema(many=True)
 topic_schema = TopicSchema()
 
 class Topic(Resource):
-    def get(self):
-        query = TopicModel.query.all()
-        data = topiclist_schema.dump(query).data
+    def get(self, id=None):
+        if id is None:
+            query = TopicModel.query.all()
+            data = topiclist_schema.dump(query).data
+        else:
+            query = TopicModel.query.filter_by(topic_id=id).first()
+            data = topic_schema.dump(query).data
 
-
-        return resFormat(200, data).set, 200
+        return resFormat(200, data), 200
 
     def post(self):
         try:
@@ -21,31 +23,24 @@ class Topic(Resource):
 
             if not json_data:
                 msg = {"message": "No input data provided"}
-                return resFormat(400, msg).set, 400
+                return resFormat(400, msg), 400
 
             data, errors = topic_schema.load(json_data)
             if errors:
-                return resFormat(422, errors).set, 422
+                return resFormat(422, errors), 422
 
-            resdata = TopicModel.query.filter_by(title=data['title']).first()
-            if resdata:
-                msg = {"message": "Title already exists"}
-                return resFormat(400, msg).set, 400
-
-            resdata = TopicModel(
-                status_id=json_data['status_id'],
-                title=json_data['title'],
-                content=json_data['content']
+            model = TopicModel(
+                topic=json_data["topic"]
             )
 
-            DBFunc().addcommit(resdata)
+            model.save()
 
-            res = topic_schema.dump(resdata).data
-        except:
-            msg = {"message": "Bad Request"}
-            return resFormat(400, msg).set, 400
+            res = topic_schema.dump(model).data
+        except Exception as e:
+            msg = {"message": str(e)}
+            return resFormat(400, msg), 400
 
-        return resFormat(201, res).set, 201
+        return resFormat(201, res), 201
 
     def put(self):
         try:
@@ -53,56 +48,39 @@ class Topic(Resource):
 
             if not json_data:
                 msg = {"message": "No input data provided"}
-                return resFormat(400, msg).set, 400
+                return resFormat(400, msg), 400
 
             data, errors = topic_schema.load(json_data)
             if errors:
-                return resFormat(422, errors).set, 422
+                return resFormat(422, errors), 422
 
-            resdata = TopicModel.query.filter_by(topic_id=data['topic_id']).first()
+            model = TopicModel()
+            resdata = model.query.filter_by(topic_id=data['topic_id']).first()
             if not resdata:
                 msg = {"message": "News does not exist"}
-                return resFormat(400, msg).set, 400
+                return resFormat(400, msg), 400
 
-            resdata.status_id = data['status_id']
-            resdata.title = data['title']
-            resdata.content = data['content']
+            resdata.topic = data['topic']
 
-            DBFunc().commitaja()
+            model.commit()
 
-            res = topic_schema.dump(resdata).data
-        except:
-            msg = {"message": "Bad Request"}
-            return resFormat(400, msg).set, 400
+            res = topic_schema.dump(model).data
+        except Exception as e:
+            msg = {"message": str(e)}
+            return resFormat(400, msg), 400
 
-        return resFormat(204, res).set, 204
+        return resFormat(200, res), 200
 
-    def delete(self):
+    def delete(self, id=None):
         try:
-            json_data = request.get_json(force=True)
+            model = TopicModel()
+            resdata = model.query.filter_by(topic_id=id).delete()
 
-            if not json_data:
-                msg = {"message": "No input data provided"}
-                return resFormat(400, msg).set, 400
+            model.commit()
 
-            data, errors = topic_schema.load(json_data)
-            if errors:
-                return resFormat(422, errors).set, 422
+            res = topic_schema.dump(model).data
+        except Exception as e:
+            msg = {"message": str(e)}
+            return resFormat(400, msg), 400
 
-            resdata = TopicModel.query.filter_by(topic_id=data['topic_id']).delete()
-
-            DBFunc().commitaja()
-
-            res = topic_schema.dump(resdata).data
-        except:
-            msg = {"message": "Bad Request"}
-            return resFormat(400, msg).set, 400
-
-        return resFormat(204, res).set, 204
-
-class TopicParam(Resource):
-    def get(self, id):
-        query = TopicModel.query.filter_by(topic_id=id).first()
-        data = topic_schema.dump(query).data
-
-        return {"status": 200, "data": data}, 200
+        return resFormat(204, res), 204

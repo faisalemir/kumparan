@@ -1,6 +1,10 @@
 from ..models import db, ma
 from marshmallow import fields
-from ..models.NewsTopic import NewsTopic
+
+NewsTopic = db.Table('tbl_details', db.Model.metadata,
+                    db.Column('news_id', db.Integer, db.ForeignKey('tbl_news.news_id'), primary_key=True),
+                    db.Column('topic_id', db.Integer, db.ForeignKey('tbl_topics.topic_id'), primary_key=True),
+                  )
 
 class NewsModel(db.Model):
     __tablename__ = 'tbl_news'
@@ -12,7 +16,21 @@ class NewsModel(db.Model):
     modified_date = db.Column(db.DateTime)
 
     statuses = db.relationship('NewsStatusModel')
-    topic_list = db.relationship('TopicModel', secondary=NewsTopic, lazy='subquery',  back_populates='news_list')
+    topic_list = db.relationship('TopicModel', secondary=NewsTopic, lazy='subquery',
+                                 backref=db.backref('NewsTopic', lazy=True))
+
+    def save(self, _topic_list):
+        db.session.add(self)
+        db.session.flush()
+
+        for row in _topic_list:
+            cmd = NewsTopic.insert().values(news_id=self.news_id, topic_id=row['topic_id'])
+            db.session.execute(cmd)
+
+        db.session.commit()
+
+    def commit(self):
+        db.session.commit()
 
 class NewsSchema(ma.Schema):
     news_id = fields.Integer()
@@ -22,5 +40,5 @@ class NewsSchema(ma.Schema):
     created_date = fields.DateTime()
     modified_date = fields.DateTime()
 
-    statuses = fields.Nested('NewsStatusSchema')
-    topic_list = fields.Nested('TopicSchema', exclude=('news_list',), many=True)
+    statuses = fields.Nested('NewsStatusSchema', exclude=["created_date"])
+    topic_list = fields.Nested('TopicSchema', many=True, only=['topic_id', 'topic'])
