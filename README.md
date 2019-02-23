@@ -85,7 +85,7 @@ python src/test/unittest.py
 
     Method: `GET`
     
-  - Get News by id
+  - Get Topic by id
   
     Method: `GET`
     
