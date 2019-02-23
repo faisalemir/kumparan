@@ -31,7 +31,7 @@ python src/test/unittest.py
     ```
   - Get News by id
     ```
-    GET news/<int: news_id>
+    GET /news/<int: news_id>
     ```
   - Insert News
     ```
