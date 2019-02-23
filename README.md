@@ -18,7 +18,7 @@ python src/test/unittest.py
 
     Method: `GET`
     
-    **Url Parameters:**
+    Url Parameters:
 
     ```
     Filter by News status:  status=<news_id>
@@ -33,7 +33,7 @@ python src/test/unittest.py
     
     Method: `POST`
 
-    JSON Parameters:
+    JSON Request Parameters:
     ```
     {
           "title": <string: data>,
@@ -53,7 +53,7 @@ python src/test/unittest.py
 
     Method: `PUT`
 
-    JSON Parameters:
+    JSON Request Parameters:
     ```
     {
           "news_id": <int: data>,
@@ -77,28 +77,28 @@ python src/test/unittest.py
 
     Method: `GET`
 
-  - Insert new Topic
+  - Insert Topic
 
     Method: `POST`
 
-    JSON Parameters:
+    JSON Request Parameters:
     ```
     {
           "topic": <string: data>
     }
     ```
-  - Update News Information
+  - Update Topic Information
 
     Method: `PUT`
 
-    JSON Parameters:
+    JSON Request Parameters:
     ```
     {
           "topic_id": <int: data>,
           "topic": <string: data>
     }
     ```
-  - Delete News
+  - Delete Topic
 
     Method: `DELETE`
 
