@@ -29,6 +29,14 @@ python src/test/unittest.py
     ```
     http://127.0.0.1:5000/new?status=<news_id>&topic=<topic_id>
     ```
+  - Get News by id
+  
+    Method: `GET`
+    
+    Url Parameter:
+    ```
+    http://127.0.0.1:5000/news/<int: news_id>
+    ```
   - Insert News
     
     Method: `POST`
@@ -76,6 +84,15 @@ python src/test/unittest.py
   - Get All Topics
 
     Method: `GET`
+    
+  - Get News by id
+  
+    Method: `GET`
+    
+    Url Parameter:
+    ```
+    http://127.0.0.1:5000/topic/<int: news_id>
+    ```
 
   - Insert Topic
 
