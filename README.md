@@ -20,7 +20,7 @@ python src/test/unittest.py
     Option Parameters:
 
     Filter by News status:  
-    `status=<news_id>`
+    `status=<status_id>`
 
     Filer by News topics:   
     `topic=<topic_id>`
