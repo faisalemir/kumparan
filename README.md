@@ -1,5 +1,5 @@
 # Kumparan Simple RESTful API with Python
-Selesai juga percobaan pertama kali di python bikin RESTful API. Perjalanan 4 hari convert syntax, konsep OOP dan pola si python didalam otak. Semoga berbuah manis..
+Selesai juga percobaan pertama kali di python bikin RESTful API. Perjalanan 4 malam untuk convert syntax, konsep OOP dan pola si python didalam otak. Semoga berbuah manis..
 ## Installation
 Restore MySQL database using `kumparan.sql`
 
