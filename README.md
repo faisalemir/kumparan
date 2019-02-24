@@ -27,7 +27,7 @@ python src/test/unittest.py
     
     Example:
     ```
-    GET /news?status=<news_id>&topic=<topic_id>
+    GET /news?status=<status_id>&topic=<topic_id>
     ```
   - Get News by id
     ```
