@@ -26,6 +26,10 @@ class Topic(Resource):
             data = topiclist_schema.dump(query.items).data
         else:
             query = TopicModel.query.filter_by(topic_id=id).first()
+            if not query:
+                msg = {"message": "Topic does not exist"}
+                return resFormat(404, msg), 404
+
             data = topic_schema.dump(query).data
 
         return resFormat(200, data, nav), 200
@@ -67,8 +71,7 @@ class Topic(Resource):
             if errors:
                 return resFormat(422, errors), 422
 
-            model = TopicModel()
-            model.query.filter_by(topic_id=data['topic_id']).first()
+            model = TopicModel.query.filter_by(topic_id=data['topic_id']).first()
             if not model:
                 msg = {"message": "Topic does not exist"}
                 return resFormat(400, msg), 400

@@ -46,6 +46,10 @@ class News(Resource):
             data = newslist_schema.dump(query.items).data
         else:
             query = NewsModel.query.filter_by(news_id=id).first()
+            if not query:
+                msg = {"message": "News does not exist"}
+                return resFormat(404, msg), 404
+
             data = news_schema.dump(query).data
 
         return resFormat(200, data, nav), 200
@@ -94,8 +98,7 @@ class News(Resource):
             if errors:
                 return resFormat(422, errors), 422
 
-            model = NewsModel()
-            model = model.query.filter_by(news_id=data['news_id']).first()
+            model = NewsModel.query.filter_by(news_id=data['news_id']).first()
             if not model:
                 msg = {"message": "News does not exist"}
                 return resFormat(400, msg), 400
