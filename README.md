@@ -19,15 +19,18 @@ python src/test/unittest.py
     ```    
     Option Parameters:
 
+    Pagination:   
+    `page=<page number>`
+    
     Filter by News status:  
     `status=<status_id>`
 
-    Filer by News topics:   
+    Filter by News topics:   
     `topic=<topic_id>`
     
     Example:
     ```
-    GET /news?status=<status_id>&topic=<topic_id>
+    GET /news?page=<page number>&status=<status_id>&topic=<topic_id>
     ```
   - Get News by id
     ```
