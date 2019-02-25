@@ -1,11 +1,9 @@
-import os
-
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = "mysql://root@localhost/kumparan"
+    PER_PAGE = 1
 
 class Testing(Config):
     DEBUG = True

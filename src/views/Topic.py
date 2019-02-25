@@ -1,4 +1,4 @@
-from flask import request
+from flask import current_app, request, url_for
 from flask_restful import Resource
 from ..models.TopicModel import TopicModel, TopicSchema
 from ..views import resFormat
@@ -8,14 +8,27 @@ topic_schema = TopicSchema()
 
 class Topic(Resource):
     def get(self, id=None):
+        page = request.args.get('page', 1, type=int)
+        nav = None
+        per_page = current_app.config['PER_PAGE']
+
         if id is None:
-            query = TopicModel.query.all()
-            data = topiclist_schema.dump(query).data
+            query = TopicModel.query
+            query = query.order_by(TopicModel.topic.asc())
+            query = query.paginate(page, per_page, False)
+
+            nav = {
+                'per_page': per_page,
+                'next': url_for(request.endpoint, page=query.next_num) if query.has_next else None,
+                'prev': url_for(request.endpoint, page=query.prev_num) if query.has_prev else None
+            }
+
+            data = topiclist_schema.dump(query.items).data
         else:
             query = TopicModel.query.filter_by(topic_id=id).first()
             data = topic_schema.dump(query).data
 
-        return resFormat(200, data), 200
+        return resFormat(200, data, nav), 200
 
     def post(self):
         try:
@@ -55,12 +68,12 @@ class Topic(Resource):
                 return resFormat(422, errors), 422
 
             model = TopicModel()
-            resdata = model.query.filter_by(topic_id=data['topic_id']).first()
-            if not resdata:
-                msg = {"message": "News does not exist"}
+            model.query.filter_by(topic_id=data['topic_id']).first()
+            if not model:
+                msg = {"message": "Topic does not exist"}
                 return resFormat(400, msg), 400
 
-            resdata.topic = data['topic']
+            model.topic = data['topic']
 
             model.commit()
 
@@ -74,7 +87,7 @@ class Topic(Resource):
     def delete(self, id=None):
         try:
             model = TopicModel()
-            resdata = model.query.filter_by(topic_id=id).delete()
+            model.query.filter_by(topic_id=id).delete()
 
             model.commit()
 

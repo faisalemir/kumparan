@@ -1,22 +1,21 @@
-from flask import request
-from flask_restful import Resource, reqparse
-from ..models.NewsModel import NewsModel, NewsSchema, NewsTopic
+from flask import current_app, request, url_for
+from flask_restful import Resource
+from ..models.NewsModel import NewsModel, NewsSchema
 from ..models.TopicModel import TopicModel
 from ..models.NewsStatusModel import *
 from ..views import resFormat
+from werkzeug.urls import url_encode
 
 newslist_schema = NewsSchema(many=True)
 news_schema = NewsSchema()
 
 class News(Resource):
     def get(self, id=None):
-        parser = reqparse.RequestParser()
-        parser.add_argument('status', type=int)
-        parser.add_argument('topic', type=int)
-        args = parser.parse_args()
+        nav = None
 
-        stat = args.get('status')
-        top = args.get('topic')
+        stat = request.args.get('status', None, type=int)
+        top = request.args.get('topic', None, type=int)
+        page = request.args.get('page', 1, type=int)
 
         #filter by news status
         stats = lambda q:  q.filter(NewsModel.status_id == stat) if stat is not None else q
@@ -25,17 +24,31 @@ class News(Resource):
         tops = lambda q:  q.filter(NewsModel.topic_list.any(TopicModel.topic_id.like(top))) if top is not None else q
 
         if id is None:
+            per_page = current_app.config['PER_PAGE']
+            args_next = request.args.copy()
+            args_prev = request.args.copy()
+
             query = NewsModel.query
             query = stats(query)
             query = tops(query)
-            data = newslist_schema.dump(query.all()).data
-        else:
-            query = NewsModel.query.filter_by(news_id=id)
-            query = stats(query)
-            query = tops(query)
-            data = news_schema.dump(query.first()).data
+            query = query.order_by(NewsModel.created_date.desc())
+            query = query.paginate(page, per_page, False)
 
-        return resFormat(200, data), 200
+            args_next['page'] = query.next_num
+            args_prev['page'] = query.prev_num
+
+            nav = {
+                'per_page': per_page,
+                'next': url_for(request.endpoint, **args_next) if query.has_next else None,
+                'prev': url_for(request.endpoint, **args_prev) if query.has_prev else None
+            }
+
+            data = newslist_schema.dump(query.items).data
+        else:
+            query = NewsModel.query.filter_by(news_id=id).first()
+            data = news_schema.dump(query).data
+
+        return resFormat(200, data, nav), 200
 
     def post(self):
         try:
@@ -49,8 +62,8 @@ class News(Resource):
             if errors:
                 return resFormat(422, errors), 422
 
-            resdata = NewsModel.query.filter_by(title=data['title']).first()
-            if resdata:
+            tmpdata = NewsModel.query.filter_by(title=data['title']).first()
+            if tmpdata:
                 msg = {"message": "Title already exists"}
                 return resFormat(400, msg), 400
 
@@ -82,14 +95,14 @@ class News(Resource):
                 return resFormat(422, errors), 422
 
             model = NewsModel()
-            resdata = model.query.filter_by(news_id=data['news_id']).first()
-            if not resdata:
+            model = model.query.filter_by(news_id=data['news_id']).first()
+            if not model:
                 msg = {"message": "News does not exist"}
                 return resFormat(400, msg), 400
 
-            resdata.status_id = data['status_id']
-            resdata.title = data['title']
-            resdata.content = data['content']
+            model.status_id = data['status_id']
+            model.title = data['title']
+            model.content = data['content']
 
             model.commit()
 
@@ -103,7 +116,7 @@ class News(Resource):
     def delete(self, id=None):
         try:
             model = NewsModel()
-            resdata = model.query.filter_by(news_id=id).delete()
+            model.query.filter_by(news_id=id).delete()
 
             model.commit()
 

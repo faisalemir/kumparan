@@ -15,9 +15,9 @@ class NewsModel(db.Model):
     created_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     modified_date = db.Column(db.DateTime)
 
-    statuses = db.relationship('NewsStatusModel')
+    statuses = db.relationship('NewsStatusModel', backref='tbl_news')
     topic_list = db.relationship('TopicModel', secondary=NewsTopic, lazy='subquery',
-                                 backref=db.backref('NewsTopic', lazy=True))
+                                 backref=db.backref('tbl_news', lazy=True))
 
     def save(self, _topic_list):
         db.session.add(self)

@@ -1,1 +1,1 @@
-resFormat = lambda status, data: {"status": status, "data": data}
+resFormat = lambda status, data, pages=None: {"status": status, "data": data, "pages": pages}

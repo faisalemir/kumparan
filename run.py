@@ -3,7 +3,7 @@ from flask import Flask
 def create_app(env):
     app = Flask(__name__)
 
-    from config import app_config
+    from src.config import app_config
     app.config.from_object(app_config[env])
 
     from src import api_bp
@@ -15,5 +15,5 @@ def create_app(env):
     return app
 
 if __name__ == "__main__":
-    app = create_app("production")
-    app.run(debug=True)
+    app = create_app("development")
+    app.run()
