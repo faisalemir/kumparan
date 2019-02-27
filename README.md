@@ -79,6 +79,15 @@ python src/test/unittest.py
     ```
     GET /topic
     ```    
+    Option Parameters:
+
+    Pagination:   
+    `page=<page number>`
+    
+    Example:
+    ```
+    GET /topic?page=<page number>
+    ```
   - Get Topic by id
     ```
     GET /topic/<int: news_id>
