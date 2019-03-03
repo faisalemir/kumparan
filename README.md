@@ -1,5 +1,5 @@
 # Simple RESTful API with Python
-Selesai juga percobaan pertama kali di python bikin RESTful API. Perjalanan 4 malam untuk convert syntax, konsep OOP dan pola si python didalam kepala. Semoga berbuah manis..
+Selesai juga percobaan pertama kali di python bikin RESTful API. Perjalanan 4 malam untuk convert syntax, konsep OOP dan pola si python didalam kepala.
 ## Installation
 Restore MySQL database using `kumparan.sql`
 
